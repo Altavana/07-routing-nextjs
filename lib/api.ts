@@ -16,10 +16,15 @@ const api = axios.create({
   headers: { Authorization: `Bearer ${myKey}` },
 });
 
-export const fetchNotes = async (search?: string, page?: number): Promise<FetchNotesResponse> => {
+export const fetchNotes = async (
+  search?: string,
+  page?: number,
+  tag?: string
+): Promise<FetchNotesResponse> => {
   const response = await api.get<FetchNotesResponse>('/notes', {
     params: {
       ...(search !== '' && { search }),
+      tag,
       page: page,
       perPage: 12,
     },
@@ -50,3 +55,16 @@ export function formatDate(date: string) {
     minute: '2-digit',
   });
 }
+
+// export interface Category {
+//   id: string;
+//   title: string;
+//   content: string;
+//   createdAt: string;
+//   updatedAt: string;
+// }
+
+// export const getCategories = async (tag: NoteTag): Promise<Note[]> => {
+//   const res = await api<Note[]>('/filter');
+//   return res.data;
+// };

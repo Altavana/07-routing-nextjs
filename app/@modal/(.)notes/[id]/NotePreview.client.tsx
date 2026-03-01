@@ -1,16 +1,20 @@
 'use client';
-import css from './NoteDetails.module.css';
+import css from './NotePreview.module.css';
 
+import Modal from '@/components/Modal/Modal';
 import { useQuery } from '@tanstack/react-query';
 import { useParams } from 'next/navigation';
 import { useRouter } from 'next/navigation';
 
 import { fetchNoteById, formatDate } from '@/lib/api';
 
-const NoteDetailsClient = () => {
+const NotePreviewClient = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
+  const closeModal = (): void => {
+    router.back();
+  };
   const { data, isLoading, error } = useQuery({
     queryKey: ['note', id],
     queryFn: () => fetchNoteById(id),
@@ -28,20 +32,22 @@ const NoteDetailsClient = () => {
   if (error || !data) return <p className={css.text}> Some error..</p>;
 
   return (
-    <div className={css.container}>
-      <div className={css.item}>
-        <div className={css.header}>
-          <h2>{data?.title}</h2>
+    <Modal onClose={closeModal}>
+      <div className={css.container}>
+        <div className={css.item}>
+          <button className={css.backBtn} onClick={handleGoBack}>
+            Back
+          </button>
+          <div className={css.header}>
+            <h2>{data?.title}</h2>
+          </div>
+          <p className={css.tag}>{data?.tag}</p>
+          <p className={css.content}>{data?.content}</p>
+          <p className={css.date}>{data?.createdAt && formatDate(data.createdAt)}</p>
         </div>
-        <p className={css.tag}>{data?.tag}</p>
-        <p className={css.content}>{data?.content}</p>
-        <p className={css.date}>{data?.createdAt && formatDate(data.createdAt)}</p>
-        <button className={css.backBtn} onClick={handleGoBack}>
-          Back
-        </button>
       </div>
-    </div>
+    </Modal>
   );
 };
 
-export default NoteDetailsClient;
+export default NotePreviewClient;

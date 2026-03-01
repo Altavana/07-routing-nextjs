@@ -13,20 +13,24 @@ import { useState, useEffect } from 'react';
 import toast, { Toaster } from 'react-hot-toast';
 import { useDebouncedCallback } from 'use-debounce';
 
-export default function App() {
+type NotesClientProps = {
+  tag?: string;
+};
+
+export default function NotesClient({ tag }: NotesClientProps) {
   const [query, setQuery] = useState('');
   const [page, setPage] = useState(1);
   const [isModOpen, setIsModOpen] = useState(false);
 
   const { data, isSuccess } = useQuery({
-    queryFn: () => fetchNotes(query, page),
-    queryKey: ['notes', query, page],
+    queryFn: () => fetchNotes(query, page, tag),
+    queryKey: ['notes', query, page, tag],
     placeholderData: keepPreviousData,
-    refetchOnMount: false,
+    // refetchOnMount: false,
   });
 
-  const changeQuery = useDebouncedCallback((query: string) => {
-    setQuery(query);
+  const changeQuery = useDebouncedCallback((value: string) => {
+    setQuery(value);
     setPage(1);
   }, 250);
 
