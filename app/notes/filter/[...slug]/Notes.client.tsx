@@ -26,7 +26,7 @@ export default function NotesClient({ tag }: NotesClientProps) {
     queryFn: () => fetchNotes(query, page, tag),
     queryKey: ['notes', query, page, tag],
     placeholderData: keepPreviousData,
-    // refetchOnMount: false,
+    refetchOnMount: false,
   });
 
   const changeQuery = useDebouncedCallback((value: string) => {
@@ -40,10 +40,10 @@ export default function NotesClient({ tag }: NotesClientProps) {
   const totalPages = data?.totalPages ?? 0;
   const notes = data?.notes ?? [];
   useEffect(() => {
-    if (isSuccess && notes.length === 0) {
+    if (isSuccess && notes.length === 0 && query) {
       toast.error('No notes found for your request.');
     }
-  }, [isSuccess, notes]);
+  }, [isSuccess, notes, query]);
   return (
     <div className={css.app}>
       <header className={css.toolbar}>
