@@ -12,7 +12,7 @@ const NotePreviewClient = () => {
   const { id } = useParams<{ id: string }>();
   const router = useRouter();
 
-  const closeModal = (): void => {
+  const handleGoBack = (): void => {
     router.back();
   };
   const { data, isLoading, error } = useQuery({
@@ -21,18 +21,12 @@ const NotePreviewClient = () => {
     refetchOnMount: false,
   });
 
-  const handleGoBack = () => {
-    const isSure = confirm('Are you sure?');
-    if (isSure) {
-      router.back();
-    }
-  };
   if (isLoading) return <p className={css.text}> Loading...</p>;
 
   if (error || !data) return <p className={css.text}> Some error..</p>;
 
   return (
-    <Modal onClose={closeModal}>
+    <Modal onClose={handleGoBack}>
       <div className={css.container}>
         <div className={css.item}>
           <button className={css.backBtn} onClick={handleGoBack}>

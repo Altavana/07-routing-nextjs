@@ -17,11 +17,8 @@ const NoteDetailsClient = () => {
     refetchOnMount: false,
   });
 
-  const handleGoBack = () => {
-    const isSure = confirm('Are you sure?');
-    if (isSure) {
-      router.back();
-    }
+  const handleGoBack = (): void => {
+    router.back();
   };
   if (isLoading) return <p className={css.text}> Loading...</p>;
 
